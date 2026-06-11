@@ -1,0 +1,12 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AzureTableStorageConnectionString": "UseDevelopmentStorage=true",
+    "ADMIN_PASSWORD": "admin123"
+  },
+  "Host": {
+    "CORS": "*"
+  }
+}

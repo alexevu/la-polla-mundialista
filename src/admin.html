@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polla Mundialista - Panel de Administración</title>
+  <meta name="description" content="Panel de control para administrador de la Polla Mundialista. Administra asignaciones, reinicia sorteos y edita equipos.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="container container-wide">
+    <header>
+      <h1>PANEL DE CONTROL</h1>
+      <p>Administración de la Polla</p>
+    </header>
+
+    <!-- Admin Login Form -->
+    <main class="card" id="admin-login-wrapper">
+      <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 20px; border-bottom: 1px solid var(--card-border); padding-bottom: 10px;">
+        Acceso de Seguridad
+      </h2>
+      <div class="form-group">
+        <label for="admin-password">Contraseña de Administrador</label>
+        <input 
+          type="password" 
+          id="admin-password" 
+          class="input-field" 
+          placeholder="Ingrese su contraseña" 
+          required
+        >
+      </div>
+      <button id="btn-login" class="btn">
+        <span>Ingresar al Panel</span>
+        <span>🔑</span>
+      </button>
+      <div id="login-alert" class="alert alert-error" style="display: none; margin-top: 16px;"></div>
+      
+      <p style="text-align: center; margin-top: 24px; font-size: 0.9rem;">
+        <a href="/" style="color: var(--text-muted); text-decoration: none;">&larr; Volver al Sorteo</a>
+      </p>
+    </main>
+
+    <!-- Admin Operations Panel (Hidden by default) -->
+    <main id="admin-panel-wrapper" style="display: none; display: flex; flex-direction: column; gap: 24px; width: 100%;">
+      
+      <!-- Stats Summary -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="val" id="stat-participants">0</div>
+          <div class="label">Participantes</div>
+        </div>
+        <div class="stat-card">
+          <div class="val" id="stat-teams-total">0</div>
+          <div class="label">Equipos Totales</div>
+        </div>
+        <div class="stat-card">
+          <div class="val" id="stat-teams-avail">0</div>
+          <div class="label">Equipos Libres</div>
+        </div>
+      </div>
+
+      <!-- Control Card -->
+      <div class="card">
+        <div class="admin-header">
+          <h2 style="font-size: 1.3rem; font-weight: 700; color: var(--accent);">Acciones del Administrador</h2>
+          <button id="btn-logout" class="btn btn-secondary" style="width: auto; padding: 8px 16px; font-size: 0.9rem;">
+            Cerrar Sesión
+          </button>
+        </div>
+        <br>
+        <div class="admin-actions">
+          <button id="btn-toggle-config" class="btn btn-secondary">
+            <span>⚙️ Configurar Equipos</span>
+          </button>
+          <button id="btn-reset" class="btn btn-danger">
+            <span>🔄 Reiniciar Sorteo</span>
+          </button>
+        </div>
+
+        <!-- Dynamic configuration form for editing teams -->
+        <div id="config-teams-wrapper" style="display: none; margin-top: 24px; border-top: 1px solid var(--card-border); padding-top: 20px;">
+          <h3 style="font-size: 1.1rem; margin-bottom: 12px; color: var(--primary);">Modificar Lista de Equipos</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+            Escribe cada selección en una línea nueva. Al guardar se eliminarán todos los registros anteriores y se reiniciará el sorteo con estos nuevos equipos.
+          </p>
+          <div class="form-group">
+            <textarea id="teams-textarea" class="input-field config-textarea" placeholder="Argentina&#10;Brasil&#10;España"></textarea>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <button id="btn-save-teams" class="btn" style="flex: 2;">
+              Guardar Equipos y Reiniciar
+            </button>
+            <button id="btn-cancel-config" class="btn btn-secondary" style="flex: 1;">
+              Cancelar
+            </button>
+          </div>
+        </div>
+        
+        <div id="panel-alert" class="alert" style="display: none; margin-top: 16px;"></div>
+      </div>
+
+      <!-- Data Details Grid -->
+      <div style="display: grid; grid-template-columns: 1fr; gap: 24px; width: 100%;" id="details-grid">
+        
+        <!-- Participants Table -->
+        <div class="card">
+          <h2 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 12px;">Participantes Registrados</h2>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Participante</th>
+                  <th>Equipo Asignado</th>
+                  <th>Fecha y Hora</th>
+                </tr>
+              </thead>
+              <tbody id="participants-tbody">
+                <tr>
+                  <td colspan="3" style="text-align: center; color: var(--text-muted);">No hay participantes registrados.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Teams Table -->
+        <div class="card">
+          <h2 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 12px;">Estado de los Equipos</h2>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Equipo</th>
+                  <th>Estado</th>
+                  <th>Asignado a</th>
+                </tr>
+              </thead>
+              <tbody id="teams-tbody">
+                <tr>
+                  <td colspan="3" style="text-align: center; color: var(--text-muted);">Cargando equipos...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <p style="text-align: center; margin-top: 10px; font-size: 0.9rem;">
+        <a href="/" style="color: var(--text-muted); text-decoration: none;">&larr; Volver al Sorteo</a>
+      </p>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 Polla Mundialista. Administrador del Sistema.</p>
+    </footer>
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

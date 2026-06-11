@@ -1,0 +1,15 @@
+{
+  "name": "polla-mundialista-api",
+  "version": "1.0.0",
+  "description": "Backend API for Polla Mundialista using Azure Functions",
+  "main": "src/functions/*.js",
+  "scripts": {
+    "start": "func start",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "dependencies": {
+    "@azure/data-tables": "^13.2.2",
+    "@azure/functions": "^4.0.0"
+  },
+  "devDependencies": {}
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polla Mundialista - Sorteo de Equipos</title>
+  <meta name="description" content="Participa en la Polla Mundialista. Registra tu nombre y obtén un equipo de forma aleatoria y transaccional sin duplicados.">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Load Canvas Confetti for celebrations -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>POLLA MUNDIALISTA</h1>
+      <p>Sorteo Oficial de Selecciones</p>
+    </header>
+
+    <main class="card" id="main-card">
+      <!-- Registration Form -->
+      <div id="registration-view">
+        <div class="form-group">
+          <label for="participant-name">Tu Nombre Completo</label>
+          <input 
+            type="text" 
+            id="participant-name" 
+            class="input-field" 
+            placeholder="Ej. Juan Pérez" 
+            autocomplete="off"
+            maxlength="50"
+            required
+          >
+        </div>
+
+        <button id="btn-draw" class="btn">
+          <span class="btn-text">Sortear equipo</span>
+          <span class="btn-icon">⚡</span>
+        </button>
+      </div>
+
+      <!-- Roulette Display -->
+      <div class="roulette-container" id="roulette-wrapper">
+        <h3 style="text-align: center; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-size: 0.9rem;">
+          Buscando tu destino en el mundial...
+        </h3>
+        <div class="roulette-window">
+          <div class="roulette-ribbon" id="roulette-ribbon">
+            <!-- Dynamic roulette items will be generated here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Reveal View -->
+      <div class="result-reveal" id="result-wrapper">
+        <h3>Tu Equipo Asignado</h3>
+        <div class="result-card">
+          <span class="flag" id="result-flag">⚽</span>
+          <span class="team-name" id="result-team">...</span>
+        </div>
+        <div class="alert alert-success" id="result-message">
+          ¡Listo! Se ha guardado tu registro exitosamente.
+        </div>
+        <button id="btn-reset-view" class="btn btn-secondary" style="margin-top: 10px;">
+          Volver a consultar
+        </button>
+      </div>
+
+      <!-- Alert Message Box -->
+      <div id="alert-box" style="display: none;"></div>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 Polla Mundialista. Desarrollado con ❤️ para Qatar 2026. <br>
+      <a href="/admin" id="admin-link">Acceso Administrador</a></p>
+    </footer>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/admin", "/admin.html", "/css/*", "/js/*", "/api/*"]
+  },
+  "routes": [
+    {
+      "route": "/admin",
+      "rewrite": "/admin.html"
+    }
+  ]
+}
