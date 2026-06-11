@@ -57,7 +57,7 @@ const teamsTbody = document.getElementById('teams-tbody');
 // Authentication Helper
 function getAuthHeader() {
   const token = sessionStorage.getItem('adminToken');
-  return token ? { 'Authorization': `Bearer ${token}` } : {};
+  return token ? { 'X-Admin-Token': sessionStorage.getItem('adminToken') } : {};
 }
 
 // Show/Hide Panel Alerts
