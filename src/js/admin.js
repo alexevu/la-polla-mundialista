@@ -120,7 +120,7 @@ async function loadAdminData() {
           minute: '2-digit',
           second: '2-digit'
         });
-        
+
         tr.innerHTML = `
           <td><strong>${escapeHTML(p.name)}</strong></td>
           <td class="td-team">${getFlag(p.team)} ${p.team}</td>
@@ -145,7 +145,7 @@ async function loadAdminData() {
         const tr = document.createElement('tr');
         const statusText = t.isAvailable ? 'Libre' : 'Asignado';
         const statusClass = t.isAvailable ? 'alert-success' : 'alert-info';
-        
+
         tr.innerHTML = `
           <td class="td-team">${getFlag(t.name)} ${t.name}</td>
           <td>
@@ -171,7 +171,7 @@ async function loadAdminData() {
 
 // Escaping helper
 function escapeHTML(str) {
-  return str.replace(/[&<>'"]/g, 
+  return str.replace(/[&<>'"]/g,
     tag => ({
       '&': '&amp;',
       '<': '&lt;',
@@ -212,12 +212,14 @@ async function handleLogin() {
     const res = await fetch('/api/manage/verify', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${password}`
+        // Cambiamos 'Authorization' por un header personalizado
+        // y enviamos solo la contraseña, sin la palabra "Bearer"
+        'X-Admin-Token': password.trim()
       }
     });
 
     if (res.ok) {
-      sessionStorage.setItem('adminToken', password);
+      sessionStorage.setItem('adminToken', password.trim());
       showPanel();
     } else {
       if (res.status === 401) {
@@ -264,8 +266,8 @@ async function handleReset() {
 async function handleSaveTeams() {
   const text = teamsTextarea.value;
   const teams = text.split('\n')
-                    .map(t => t.trim())
-                    .filter(t => t.length > 0);
+    .map(t => t.trim())
+    .filter(t => t.length > 0);
 
   if (teams.length === 0) {
     alert('Debe escribir al menos un equipo.');
