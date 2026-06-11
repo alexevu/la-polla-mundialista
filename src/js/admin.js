@@ -57,7 +57,7 @@ const teamsTbody = document.getElementById('teams-tbody');
 // Authentication Helper
 function getAuthHeader() {
   const token = sessionStorage.getItem('adminToken');
-  return token ? { 'X-Admin-Token': sessionStorage.getItem('adminToken') } : {};
+  return token ? { 'X-Admin-Token': token } : {};
 }
 
 // Show/Hide Panel Alerts
@@ -73,13 +73,21 @@ function showPanelAlert(message, type = 'success') {
 // Fetch and load data
 async function loadAdminData() {
   const headers = getAuthHeader();
-  if (!headers.Authorization) {
+
+  // 1. Validamos usando nuestro nuevo encabezado personalizado
+  if (!headers['X-Admin-Token']) {
     showLogin();
+    // Aquí podrías agregar: btnLogin.disabled = false; si tienes acceso a la variable
     return;
   }
 
   try {
-    const res = await fetch('/api/manage/assignments', { headers });
+    // 2. Agregamos cache: 'no-store' para obligar a Azure a darnos datos frescos
+    const res = await fetch('/api/manage/assignments', {
+      headers,
+      cache: 'no-store'
+    });
+
     if (res.status === 401) {
       sessionStorage.removeItem('adminToken');
       showLogin();
