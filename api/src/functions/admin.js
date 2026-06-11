@@ -13,27 +13,21 @@ app.http('admin', {
                 return { status: 404, body: 'Acción no encontrada.' };
             }
 
-            // --- INICIO DE AUTENTICACIÓN CORREGIDA ---
-            const authHeader = request.headers.get('authorization');
+            // --- INICIO DE AUTENTICACIÓN PERSONALIZADA ---
+            // Buscamos nuestro propio header en lugar de 'authorization'
+            const authHeader = request.headers.get('x-admin-token');
             const expectedPassword = process.env.ADMIN_PASSWORD || 'admin123';
 
-            // Registramos en Azure qué estamos recibiendo exactamente
-            context.log(`-> Header de autorización recibido: ${authHeader}`);
+            context.log(`-> Header personalizado recibido: ${authHeader}`);
 
-            let tokenRecibido = '';
-            // Validamos ignorando mayúsculas/minúsculas en la palabra "bearer"
-            if (authHeader && authHeader.toLowerCase().startsWith('bearer ')) {
-                // Tomamos todo lo que está después de los primeros 7 caracteres ("bearer ")
-                tokenRecibido = authHeader.substring(7).trim();
-            }
-
-            if (!authHeader || tokenRecibido !== expectedPassword) {
-                context.log(`-> Acceso denegado. Se esperaba: ${expectedPassword} pero se recibió: ${tokenRecibido}`);
+            // Ya no necesitamos validar "Bearer", solo comparamos directo
+            if (!authHeader || authHeader !== expectedPassword) {
+                context.log(`-> Acceso denegado. Se esperaba: ${expectedPassword} pero se recibió: ${authHeader}`);
                 return { status: 401, body: 'No autorizado. Contraseña incorrecta.' };
             }
 
             context.log("-> Autenticación exitosa");
-            // --- FIN DE AUTENTICACIÓN CORREGIDA ---
+            // --- FIN DE AUTENTICACIÓN PERSONALIZADA ---
 
             const client = await getTableClient();
 
