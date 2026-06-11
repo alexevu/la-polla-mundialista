@@ -13,12 +13,27 @@ app.http('admin', {
                 return { status: 404, body: 'Acción no encontrada.' };
             }
 
-            // Authentication verification
+            // --- INICIO DE AUTENTICACIÓN CORREGIDA ---
             const authHeader = request.headers.get('authorization');
             const expectedPassword = process.env.ADMIN_PASSWORD || 'admin123';
-            if (!authHeader || authHeader !== `Bearer ${expectedPassword}`) {
+
+            // Registramos en Azure qué estamos recibiendo exactamente
+            context.log(`-> Header de autorización recibido: ${authHeader}`);
+
+            let tokenRecibido = '';
+            // Validamos ignorando mayúsculas/minúsculas en la palabra "bearer"
+            if (authHeader && authHeader.toLowerCase().startsWith('bearer ')) {
+                // Tomamos todo lo que está después de los primeros 7 caracteres ("bearer ")
+                tokenRecibido = authHeader.substring(7).trim();
+            }
+
+            if (!authHeader || tokenRecibido !== expectedPassword) {
+                context.log(`-> Acceso denegado. Se esperaba: ${expectedPassword} pero se recibió: ${tokenRecibido}`);
                 return { status: 401, body: 'No autorizado. Contraseña incorrecta.' };
             }
+
+            context.log("-> Autenticación exitosa");
+            // --- FIN DE AUTENTICACIÓN CORREGIDA ---
 
             const client = await getTableClient();
 
